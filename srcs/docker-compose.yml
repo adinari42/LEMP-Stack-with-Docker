@@ -1,0 +1,49 @@
+version: "3.3"
+
+services:
+  nginx:
+    container_name: nginx
+    build: requirements/nginx
+    volumes:
+      - wp_content:/var/www/html/wp-content
+    depends_on:
+      - wordpress
+    restart: always
+    networks:
+      - wordpress_network
+  db:
+    container_name: db
+    build: requirements/mariadb
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+    env_file: .env
+    networks:
+      - wordpress_network
+  wordpress:
+    container_name: wordpress
+    build: requirements/wordpress
+    depends_on:
+      - db
+    restart: always
+    env_file: .env
+    volumes:
+      - wp_content:/var/www/html/wp_content
+    networks:
+      - wordpress_network
+volumes:
+  wp_content:
+    driver: local
+    driver_opts:
+      type: "none"
+      o: "bind"
+      device: /tmp/wp_content
+  db_data:
+    driver: local
+    driver_opts:
+      type: "none"
+      o: "bind"
+      device: /tmp/db_data
+networks:
+  wordpress_network:
+    driver: bridge
