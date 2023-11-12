@@ -1,38 +1,23 @@
 #!/bin/sh
 
-mysql_install_db
-
-chown -R mysql:mysql /run/mysqld
-chown -R mysql:mysql /var/lib/mysql
-
-/etc/init.d/mariadb start
+service mysql start
 
 if [ -d "/var/lib/mysql/$MYSQL_DATABASE" ]
 then 
 	echo "Database already exists"
 else
-
-
-mysql_secure_installation << _EOF_
-Y
-$MYSQL_ROOT_PASSWORD
-$MYSQL_ROOT_PASSWORD
-Y
-n
-Y
-Y
-_EOF_
-
-
-echo "GRANT ALL ON *.* TO 'root'@'%' IDENTIFIED BY '$MYSQL_ROOT_PASSWORD'; FLUSH PRIVILEGES;" | mysql -uroot
-
-
-echo "CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE; GRANT ALL ON $MYSQL_DATABASE.* TO '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD'; FLUSH PRIVILEGES;" | mysql -u root
-
-mysql -uroot -p$MYSQL_ROOT_PASSWORD $MYSQL_DATABASE < /tmp/db.sql
+sleep 1
+mysql -e "\
+		CREATE DATABASE IF NOT EXISTS ${MYSQL_DATABASE}; \
+		CREATE USER '${MYSQL_USER}'@'%' IDENTIFIED BY '${MYSQL_PASSWORD}'; \
+		GRANT ALL ON ${MYSQL_DATABASE}.* TO '${MYSQL_USER}'@'%'; \
+		ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}'; \
+		FLUSH PRIVILEGES; "
 
 fi
 
-/etc/init.d/mariadb stop
+echo "Shuting down the mysql service..."
+mysqladmin --user=root --password=$MYSQL_ROOT_PASSWORD shutdown
+echo "Mysql service has been shut down"
 
 exec "$@"

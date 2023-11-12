@@ -4,6 +4,8 @@ services:
   nginx:
     container_name: nginx
     build: requirements/nginx
+    ports:
+      - 443:443
     volumes:
       - wp_content:/var/www/html/wp-content
     depends_on:
@@ -11,8 +13,8 @@ services:
     restart: always
     networks:
       - wordpress_network
-  db:
-    container_name: db
+  mariadb:
+    container_name: mariadb
     build: requirements/mariadb
     volumes:
       - db_data:/var/lib/mysql
@@ -20,17 +22,21 @@ services:
     env_file: .env
     networks:
       - wordpress_network
+    expose:
+      - 3306
   wordpress:
     container_name: wordpress
     build: requirements/wordpress
     depends_on:
-      - db
+      - mariadb
     restart: always
     env_file: .env
     volumes:
       - wp_content:/var/www/html/wp_content
     networks:
       - wordpress_network
+    expose:
+      - 9000
 volumes:
   wp_content:
     driver: local
