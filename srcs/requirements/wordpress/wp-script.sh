@@ -23,6 +23,6 @@ else
 	chmod -R 755 /var/www
 
 fi
-echo "Wordpress is up and running. Access the website via https://miahmadi.42.fr/"
+echo "Wordpress is up and running. Access the website via https://adinari.42.fr/"
 echo "<?php phpinfo(); ?>" > test.php
 exec "$@"
