@@ -1,4 +1,4 @@
-# LEMP Stack with Docker
+# LEMP-Stack-with-Docker
 
 This project sets up a custom WordPress website using MariaDB, NGINX, and WordPress containers, all connected through a Docker environment managed by Docker Compose. It allows for quick deployment and is intended as a template for personal projects with a pre-configured environment.
 
@@ -49,7 +49,7 @@ make fclean
 ## Directory Structure
 
 ```
-wp-docker-infrastracture/
+LEMP-Stack-with-Docker/
 ├── srcs/
 │   ├── docker-compose.yml
 │   ├── .env
