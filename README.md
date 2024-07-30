@@ -20,8 +20,8 @@ This project sets up a custom WordPress website using MariaDB, NGINX, and WordPr
 ### 1. Clone the Repository
 
 ```sh
-git clone git@github.com:adinari42/wp-docker-infrastracture.git
-cd wp-docker-infrastracture/srcs
+git clone git@github.com:adinari42/LEMP-Stack-with-Docker.git
+cd LEMP-Stack-with-Docker/srcs
 ```
 
 ### 2. Build and Deploy
